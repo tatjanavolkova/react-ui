@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -13,6 +13,7 @@ import logoImage from "../../assets/logo-128.svg";
 import menuIcon from "../../assets/icons/icon-menu.svg";
 import plusIcon from "../../assets/icons/icon-plus.svg";
 import userIcon from "../../assets/icons/icon-person.svg";
+import ModalContext from "../../context/ModelContext";
 
 const StyledNav = styled.header`
   border: 1px solid #ff0ff0;
@@ -73,7 +74,7 @@ const DropDown = styled.div`
   top: 4rem;
   width: 12rem;
   background: ${colors.bg};
-
+  z-index: ${zIndexes.sideBar};
   display: none;
 
   ${devices.mobile} {
@@ -111,6 +112,7 @@ const Nav = () => {
   const navigate = useNavigate();
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const { setIsOpen } = useContext(ModalContext);
 
   return (
     <StyledNav>
@@ -130,17 +132,20 @@ const Nav = () => {
       {isDropdownOpen && (
         <DropDown>
           <StyledLink to="/my-posts">My posts</StyledLink>
-          <StyledLink to="/auth">Log in / Register</StyledLink>
+          <StyledLink to="/auth" onClick={() => setIsOpen(true)}>
+            Log in / Register
+          </StyledLink>
         </DropDown>
       )}
 
       {isSideBarOpen && (
         <MobileMenu>
-          <StyledLink to="/">Home</StyledLink>
           <StyledLink to="/all-posts">All posts</StyledLink>
           <StyledLink to="/my-posts">My posts</StyledLink>
           <StyledLink to="/create">Create a post</StyledLink>
-          <StyledLink to="/auth">Log in / Register</StyledLink>
+          <StyledLink to="/auth" onClick={() => setIsOpen(true)}>
+            Log in / Register
+          </StyledLink>
         </MobileMenu>
       )}
     </StyledNav>
